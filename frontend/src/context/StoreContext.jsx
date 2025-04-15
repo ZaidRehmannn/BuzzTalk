@@ -5,7 +5,7 @@ import { socket } from '../socket.js';
 export const StoreContext = createContext(null);
 
 const StoreContextProvider = (props) => {
-    const url = 'http://localhost:4000';
+    const url = 'https://veil-mixed-music.glitch.me';
 
     const [userData, setuserData] = useState(null);
     const [userContacts, setuserContacts] = useState([]);
