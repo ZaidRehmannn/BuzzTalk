@@ -14,10 +14,14 @@ import groupChatRouter from './routes/groupChatRoute.js';
 const app = express();
 const server = http.createServer(app);
 
-// Initialize Socket.io
-export const io = new Server(server, {
-    cors: { origin: "http://localhost:5173", methods: ["GET", "POST"] }
-});
+// Dynamically set the CORS origin based on environment
+const corsOptions = {
+    origin: process.env.NODE_ENV === 'production' ? 'https://buzz-talk-beta.vercel.app/' : 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+};
+
+// Initialize Socket.io with dynamic CORS settings
+export const io = new Server(server, corsOptions);
 
 // Middleware
 app.use(express.json());
