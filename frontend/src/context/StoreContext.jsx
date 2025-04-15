@@ -82,7 +82,7 @@ const StoreContextProvider = (props) => {
         const token = localStorage.getItem("token");
         const response = await axios.post(url + '/api/conversation/getuserconvos', {}, { headers: { token } });
         if (response.data.success) {
-            setuserConversations(response.data.conversations);
+            setuserConversations(response.data.enhancedConversations);
         } else {
             console.log(response.data.message);
         }

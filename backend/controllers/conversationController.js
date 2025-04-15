@@ -202,7 +202,38 @@ const getUserConversations = async (req, res) => {
     const userId = req.userId;
     try {
         const conversations = await conversationModel.find({ participants: userId });
-        res.json({ success: true, conversations });
+        const user = await userModel.findById(userId);
+
+        // Adding participant information with the conversation
+        const enhancedConversations = await Promise.all(conversations.map(async (conversation) => {
+            const conversationObj = conversation.toObject();
+
+            // For private chats (not groups)
+            if (!conversationObj.groupName) {
+                const otherPersonId = conversationObj.participants.find(
+                    participantId => participantId.toString() !== userId.toString()
+                );
+
+                let otherPerson = await userModel.findById(otherPersonId);
+                let contact = user.contacts.find(
+                    (contact) => contact.contactId.toString() === otherPersonId.toString()
+                );                
+
+                const PersonImage = otherPerson?.image || "";
+
+                if (contact) {
+                    contact = { ...contact.toObject?.(), notContact: false, conversationId: conversation._id, image: PersonImage };
+                    conversationObj.participant = contact;
+                } else {
+                    otherPerson = { ...otherPerson.toObject(), notContact: true, conversationId: conversation._id };
+                    conversationObj.participant = otherPerson;
+                }
+            }
+
+            return conversationObj;
+        }));
+
+        res.json({ success: true, enhancedConversations });
     } catch (error) {
         console.log(error);
         res.json({ success: false, message: "Error" });

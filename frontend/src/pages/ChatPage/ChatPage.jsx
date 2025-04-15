@@ -377,7 +377,6 @@ const ChatPage = () => {
         const response = await axios.post(url + '/api/conversation/getmsgs', { conversationId }, { headers: { token } });
         if (response.data.success) {
           setmessages(response.data.messages);
-          console.log(messages);
         }
       }
       markMessagesAsRead(person.conversationId);
@@ -400,6 +399,10 @@ const ChatPage = () => {
   };
 
   const userChatList = () => {
+    if (!userConversations || !users || !userData || !userContacts) {
+      return;
+    }
+
     let chats = [];
     userConversations.forEach((conversation) => {
       let userChat = {
@@ -414,28 +417,19 @@ const ChatPage = () => {
 
       // Private Chat
       if (!conversation.groupName) {
-        const otherPersonId = conversation.participants.find(
-          (participantId) => participantId.toString() !== userData?._id.toString()
-        );
-
-        let otherPerson = users.find((user) => user._id.toString() === otherPersonId.toString());
-        const PersonImage = otherPerson?.image || "";
-        otherPerson = { ...otherPerson, image: PersonImage, conversationId: conversation._id, notContact: true };
-
-        let contact = userContacts.find((contact) => contact.contactId === otherPersonId.toString());
-        contact = { ...contact, image: PersonImage, conversationId: conversation._id, notContact: false };
+        let person = conversation.participant;
 
         // If contact exists
-        if (contact && contact.firstName && contact.lastName) {
-          userChat.image = PersonImage;
-          userChat.name_phoneNo = `${contact.firstName} ${contact.lastName}`;
-          userChat.person_group = contact;
-        }
+        if(!person.notContact){
+          userChat.image = person.image;
+          userChat.name_phoneNo = `${person.firstName} ${person.lastName}`;
+          userChat.person_group = person;
+        } 
         // If not a contact (use phone number)
-        else {
-          userChat.image = PersonImage;
-          userChat.name_phoneNo = otherPerson.phoneNo;
-          userChat.person_group = otherPerson;
+        else{
+          userChat.image = person?.image || "";
+          userChat.name_phoneNo = person.phoneNo;
+          userChat.person_group = person;
         }
 
         // Set last message
@@ -444,7 +438,7 @@ const ChatPage = () => {
           userChat.lastMessageText =
             lastMessage.senderId.toString() === userData._id.toString()
               ? `You: ${lastMessage.text}`
-              : contact.firstName ? `${contact.firstName}: ${lastMessage.text}` : `${otherPerson.phoneNo}: ${lastMessage.text}`
+              : !person.notContact ? `${person.firstName}: ${lastMessage.text}` : `${person.phoneNo}: ${lastMessage.text}`
           userChat.lastMessageTime = lastMessage.timestamp;
         }
 
@@ -468,7 +462,7 @@ const ChatPage = () => {
           userChat.lastMessageText =
             lastMessage.senderId.toString() === userData._id.toString()
               ? `You: ${lastMessage.text}`
-              : senderContact ? `${senderContact.firstName}: ${lastMessage.text}` : `${senderPerson.phoneNo}: ${lastMessage.text}`;
+              : senderContact ? `${senderContact.firstName}: ${lastMessage.text}` : `${senderPerson?.phoneNo}: ${lastMessage.text}`;
           userChat.lastMessageTime = lastMessage.timestamp;
         }
 
@@ -518,8 +512,12 @@ const ChatPage = () => {
   }, []);
 
   useEffect(() => {
-    userChatList();
-  }, [userConversations, lastMessages, unreadMessages, searchTerm]);  
+    if (userConversations && users && userData && userContacts) {
+      userChatList();
+    }
+  },
+    [userConversations, users, userData, userContacts, lastMessages, unreadMessages, searchTerm]
+  );
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -842,12 +840,12 @@ const ChatPage = () => {
               <div className="flex-1 overflow-y-auto pr-2">
                 {messages.map((msg, index) => {
                   const senderContact = userContacts.find(contact => contact.contactId === msg.senderId);
-                  const senderData = users.find(user => user._id === msg.senderId);
+                  const senderData = users.find(user => user._id.toString() === msg.senderId.toString());
                   return (
                     <div key={index} className={`p-2 my-2 rounded-lg xl:w-[40%] md:w-[46%] w-[70%] break-words overflow-hidden ${msg.senderId === userData._id ? 'bg-purple-600 text-white ml-auto' : 'bg-gray-700 text-white'}`}>
                       {msg.senderId !== userData._id && (
                         <small className="text-gray-300 font-bold">
-                          {senderContact ? `${senderContact.firstName} ${senderContact.lastName}` : senderData.phoneNo}
+                          {senderContact ? `${senderContact.firstName} ${senderContact.lastName}` : senderData?.phoneNo}
                         </small>
                       )}
                       <p>
