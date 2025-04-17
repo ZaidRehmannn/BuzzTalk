@@ -14,18 +14,23 @@ import groupChatRouter from './routes/groupChatRoute.js';
 const app = express();
 const server = http.createServer(app);
 
-// Dynamically set the CORS origin based on environment
+// CORS options for both API and Socket.io
 const corsOptions = {
-    origin: 'http://localhost:5173',
+    origin: 'http://localhost:5173',  // Allow the frontend port
     methods: ['GET', 'POST'],
+    credentials: true  // If you are using cookies or authentication
 };
 
-// Initialize Socket.io with dynamic CORS settings
-export const io = new Server(server, corsOptions);
+// Apply CORS middleware to API routes
+app.use(cors(corsOptions));
+
+// Initialize Socket.io with CORS settings
+export const io = new Server(server, {
+    cors: corsOptions  // Pass the same cors options to Socket.io
+});
 
 // Middleware
 app.use(express.json());
-app.use(cors());
 
 // DB connection
 connectDB();
