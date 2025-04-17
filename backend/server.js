@@ -16,7 +16,7 @@ const server = http.createServer(app);
 
 // Dynamically set the CORS origin based on environment
 const corsOptions = {
-    origin: process.env.NODE_ENV === 'production' ? 'https://buzz-talk-beta.vercel.app/' : 'http://localhost:5173',
+    origin: 'http://localhost:5173',
     methods: ['GET', 'POST'],
 };
 
@@ -60,7 +60,7 @@ io.on('connection', (socket) => {
     // Send private or group chat message
     socket.on('sendMessage', async ({ senderId, receiverId, groupChatId, text, timestamp, token, conversationId }) => {
         try {
-            let response = await fetch('https://veil-mixed-music.glitch.me/api/conversation/sendmsg', {
+            let response = await fetch('http://localhost:4000/api/conversation/sendmsg', {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', 'token': token },
                 body: JSON.stringify({ senderId, receiverId, text, timestamp, conversationId }),
@@ -114,5 +114,5 @@ io.on('connection', (socket) => {
 const port = process.env.PORT || 4000;
 
 server.listen(port, '0.0.0.0', () => {
-    console.log(`Server started on port ${port}`);
+    console.log(`Server started on http://localhost:${port}`);
 });
