@@ -1,0 +1,45 @@
+.logout-wrapper {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to top left, #2D132C, #2E1A47);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    overflow: hidden;
+}
+
+.logout-spinner {
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    border: 6px solid white;
+    border-top-color: transparent;
+    animation: spinShrink 2s ease-in-out forwards;
+    margin-bottom: 20px;
+}
+
+@keyframes spinShrink {
+    0% {
+        transform: rotate(0deg) scale(1);
+        opacity: 1;
+    }
+
+    100% {
+        transform: rotate(720deg) scale(0.5);
+        opacity: 0.2;
+    }
+}
+
+.logout-text {
+    display: flex;
+    font-size: 1.5rem;
+    font-weight: 500;
+    color: white;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.logout-letter {
+    margin: 0 2px;
+}

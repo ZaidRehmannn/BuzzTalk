@@ -1,7 +1,6 @@
 import React, { useRef, useState, useEffect, useContext } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faMessage, faUser, faRightFromBracket, faMagnifyingGlass, faAddressBook, faPaperPlane, faArrowLeft, faUsers, faCircleInfo, faPhone, faVideo, faPlus, faPaperclip, faFile, faImage, faCircleMinus, faX, faCircleDown, faSpinner, faCheckCircle } from '@fortawesome/free-solid-svg-icons';
-import { useNavigate } from 'react-router-dom';
 import LogoutPopup from '../../components/LogoutPopup/LogoutPopup.jsx';
 import ProfilePopup from '../../components/ProfilePopup/ProfilePopup.jsx';
 import MyContacts from '../../components/MyContacts/MyContacts.jsx';
@@ -12,10 +11,10 @@ import NewChatPopup from '../../components/NewChatPopup/NewChatPopup.jsx';
 import { StoreContext } from '../../context/StoreContext.jsx';
 import { socket, connectSocket } from '../../socket.js';
 import axios from 'axios';
+import PreLoader from '../../components/PreLoader/PreLoader.jsx';
 
 const ChatPage = () => {
-  const { userData, fetchUserData, userContacts, fetchUserContacts, userGroupChats, fetchUserGroupChats, url, users, lastMessages, setlastMessages, fetchLastMessages, userConversations, unreadMessages, setunreadMessages, fetchAllUnreadMessages, fetchUserConversations, isAppLoading, resetStore } = useContext(StoreContext);
-  const navigate = useNavigate();
+  const { userData, fetchUserData, userContacts, fetchUserContacts, userGroupChats, fetchUserGroupChats, url, users, lastMessages, setlastMessages, fetchLastMessages, userConversations, unreadMessages, setunreadMessages, fetchAllUnreadMessages, fetchUserConversations, isAppLoading } = useContext(StoreContext);
   const inputRef = useRef();
   const logoutRef = useRef(null);
   const profileRef = useRef(null);
@@ -52,12 +51,6 @@ const ChatPage = () => {
 
   const focusInput = () => {
     inputRef.current.focus();
-  };
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    resetStore();
-    navigate("/", { replace: true });
   };
 
   const toggleLogoutTooltip = () => {
@@ -420,13 +413,13 @@ const ChatPage = () => {
         let person = conversation.participant;
 
         // If contact exists
-        if(!person.notContact){
+        if (!person.notContact) {
           userChat.image = person.image;
           userChat.name_phoneNo = `${person.firstName} ${person.lastName}`;
           userChat.person_group = person;
-        } 
+        }
         // If not a contact (use phone number)
-        else{
+        else {
           userChat.image = person?.image || "";
           userChat.name_phoneNo = person.phoneNo;
           userChat.person_group = person;
@@ -534,20 +527,11 @@ const ChatPage = () => {
     }
   }, [messages]);
 
-  if (userData == null || !userConversations || !userChats || !userContacts || !userGroupChats || !lastMessages || !unreadMessages) {
-    return (
-      <div className="fixed inset-0 flex flex-col items-center justify-center backdrop-blur-md z-50">
-        <div className="w-12 h-12 border-4 border-purple-600 border-t-transparent rounded-full animate-spin"></div>
-        <div className="mt-4 text-white font-semibold">Loading...</div>
-      </div>
-    );
-  }
-
   return (
     <>
       {logoutPopup && (
         <div className='fixed top-0 left-0 w-full h-full bg-black bg-opacity-50 flex justify-center items-center z-50'>
-          <LogoutPopup setlogoutPopup={setlogoutPopup} logout={logout} />
+          <LogoutPopup setlogoutPopup={setlogoutPopup} />
         </div>
       )}
       {profilePopup && (
@@ -607,6 +591,7 @@ const ChatPage = () => {
         </div>
       )}
 
+      <PreLoader />
       <div className='container flex min-w-full min-h-screen'>
         <div className="left-panel flex flex-col w-full lg:w-[30%] h-[90vh] lg:h-[93vh] m-3 lg:m-5 lg:ml-4 lg:mr-2 rounded-2xl bg-gradient-to-tl from-[#2D132C] to-[#2E1A47] shadow-sm shadow-lightGray">
           <div className="logo-profile flex items-center justify-between px-4 py-3">

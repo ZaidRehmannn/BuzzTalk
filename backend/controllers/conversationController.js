@@ -1,4 +1,4 @@
-import conversationModel from '../models/conversationModel.js';
+import conversationModel from "../models/conversationModel.js";
 import userModel from "../models/userModel.js";
 
 // send message in a conversation
@@ -35,10 +35,10 @@ const sendMessage = async (req, res) => {
         });
 
         await conversation.save();
-        res.json({ success: true, message: "Message sent" });
+        res.status(200).json({ success: true, message: "Message sent" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 
@@ -84,10 +84,10 @@ const sendFile = async (req, res) => {
         });
 
         await conversation.save();
-        res.json({ success: true, message: "File sent", fileUrl });
+        res.status(200).json({ success: true, message: "File sent", fileUrl });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 
@@ -110,10 +110,10 @@ const markMessagesAsRead = async (req, res) => {
         });
 
         await conversation.save();
-        res.json({ success: true, message: "Messages marked as read" });
+        res.status(200).json({ success: true, message: "Messages marked as read" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 
@@ -130,11 +130,10 @@ const getAllUnreadMessages = async (req, res) => {
             unreadMessagesCount[conversation._id] = count;
         });
 
-        res.json({ success: true, unreadMessagesCount });
-
+        res.status(200).json({ success: true, unreadMessagesCount });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 
@@ -145,15 +144,14 @@ const getMessages = async (req, res) => {
     try {
         const conversation = await conversationModel.findById(conversationId);
         if (conversation.messages.length === 0) {
-            return res.json({ success: true, messages: [] })
+            return res.status(200).json({ success: true, messages: [] });
         }
 
         const sortedMessages = conversation.messages.sort((a, b) => a.timestamp - b.timestamp);
-        res.json({ success: true, messages: sortedMessages });
-
+        res.status(200).json({ success: true, messages: sortedMessages });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 
@@ -174,9 +172,7 @@ const getLastMessages = async (req, res) => {
                 let displayText = lastMessage.text;
 
                 if (!displayText && lastMessage.fileUrl) {
-                    // Extract the filename from the URL
                     const filename = lastMessage.fileUrl.split('/').pop();
-                    // Remove the ID part from the filename
                     const cleanFileName = filename.replace(/_[a-zA-Z0-9]{8}(?=\.[^.]+$)/, '');
                     displayText = decodeURIComponent(cleanFileName);
                 }
@@ -191,24 +187,23 @@ const getLastMessages = async (req, res) => {
             }
         });
 
-        res.json({ success: true, lastMessages });
+        res.status(200).json({ success: true, lastMessages });
     } catch (error) {
         console.error(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 
+// get user conversations
 const getUserConversations = async (req, res) => {
     const userId = req.userId;
     try {
         const conversations = await conversationModel.find({ participants: userId });
         const user = await userModel.findById(userId);
 
-        // Adding participant information with the conversation
         const enhancedConversations = await Promise.all(conversations.map(async (conversation) => {
             const conversationObj = conversation.toObject();
 
-            // For private chats (not groups)
             if (!conversationObj.groupName) {
                 const otherPersonId = conversationObj.participants.find(
                     participantId => participantId.toString() !== userId.toString()
@@ -233,10 +228,10 @@ const getUserConversations = async (req, res) => {
             return conversationObj;
         }));
 
-        res.json({ success: true, enhancedConversations });
+        res.status(200).json({ success: true, enhancedConversations });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 
@@ -246,37 +241,34 @@ const createConversation = async (req, res) => {
     const { phoneNo } = req.body;
 
     try {
-        // Find the user by phone number
         const otherUser = await userModel.findOne({ phoneNo });
 
         if (!otherUser) {
-            return res.json({ success: false, message: "Phone Number Not Registered on BuzzTalk!" });
+            return res.status(404).json({ success: false, message: "Phone Number Not Registered on BuzzTalk!" });
         }
 
         if (otherUser._id.toString() === userId.toString()) {
-            return res.json({ success: false, message: "ERROR!" });
+            return res.status(400).json({ success: false, message: "Cannot chat with yourself!" });
         }
 
-        // Check if conversation already exists
         const existingConversation = await conversationModel.findOne({
             participants: { $all: [userId, otherUser._id] },
-            groupName: null // Ensure it's not a group chat
+            groupName: null
         });
 
         if (existingConversation) {
-            return res.json({ success: false, message: "Chat already exists!" });
+            return res.status(409).json({ success: false, message: "Chat already exists!" });
         }
 
-        // Create new conversation
         const newConversation = new conversationModel({
             participants: [userId, otherUser._id]
         });
 
         await newConversation.save();
-        res.json({ success: true, message: "New Chat Created!" });
+        res.status(201).json({ success: true, message: "New Chat Created!" });
     } catch (error) {
         console.error(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Internal Server Error" });
     }
 };
 

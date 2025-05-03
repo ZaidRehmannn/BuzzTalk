@@ -1,0 +1,103 @@
+.preloader-wrapper {
+    position: fixed;
+    inset: 0;
+    background: linear-gradient(to top left, #2D132C, #2E1A47);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    z-index: 50;
+    overflow: hidden;
+}
+
+.floating-dot {
+    position: absolute;
+    width: 32px;
+    height: 32px;
+    background-color: #9333EA;
+    /* purple-600 */
+    border-radius: 9999px;
+    filter: blur(12px);
+    opacity: 0.08;
+    z-index: 0;
+}
+
+@keyframes float0 {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(8px);
+    }
+}
+
+@keyframes float1 {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes float2 {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(12px);
+    }
+}
+
+@keyframes float3 {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(-6px);
+    }
+}
+
+@keyframes float4 {
+
+    0%,
+    100% {
+        transform: translateY(0);
+    }
+
+    50% {
+        transform: translateY(10px);
+    }
+}
+
+.float0 {
+    animation: float0 6s ease-in-out infinite;
+}
+
+.float1 {
+    animation: float1 6s ease-in-out infinite;
+}
+
+.float2 {
+    animation: float2 6s ease-in-out infinite;
+}
+
+.float3 {
+    animation: float3 6s ease-in-out infinite;
+}
+
+.float4 {
+    animation: float4 6s ease-in-out infinite;
+}

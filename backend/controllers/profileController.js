@@ -6,10 +6,10 @@ import bcrypt from 'bcrypt';
 const userInfo = async (req, res) => {
     try {
         let userData = await userModel.findById(req.userId);
-        res.json({ success: true, userData });
+        res.status(200).json({ success: true, userData });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -17,20 +17,18 @@ const userInfo = async (req, res) => {
 const uploadImage = async (req, res) => {
     try {
         let user = await userModel.findById(req.userId);
-        // if profile picture already exists, delete the old one
         if (user.image) {
             const publicId = user.image.split('/').pop().split('.')[0];
             await cloudinary.uploader.destroy(`BuzzTalk-ProfilePics/${publicId}`);
         }
-        // adding new profile picture
         let image_filename = req.file.path;
         user.image = image_filename;
 
         await user.save();
-        res.json({ success: true, image_filename });
+        res.status(200).json({ success: true, image_filename });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -41,13 +39,13 @@ const removeImage = async (req, res) => {
         if (user.image) {
             const publicId = user.image.split('/').pop().split('.')[0];
             await cloudinary.uploader.destroy(`BuzzTalk-ProfilePics/${publicId}`);
-            user.image = ""
+            user.image = "";
         }
         await user.save();
-        res.json({ success: true, message: "Profile Picture Removed!" });
+        res.status(200).json({ success: true, message: "Profile Picture Removed!" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -62,10 +60,10 @@ const updateInfo = async (req, res) => {
             user.lastName = req.body.lastName;
         }
         await user.save();
-        res.json({ success: true, message: "Info Updated!" });
+        res.status(200).json({ success: true, message: "Info Updated!" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -77,27 +75,25 @@ const updatePassword = async (req, res) => {
 
         const isMatch = await bcrypt.compare(oldPassword, user.password);
         if (!isMatch) {
-            return res.json({ success: false, message: "Old Password is Incorrect!" });
+            return res.status(401).json({ success: false, message: "Old Password is Incorrect!" });
         }
 
-        // validating new password
         if (newPassword.length < 8) {
-            return res.json({ success: false, message: "Password must be at least 8 characters long" });
+            return res.status(400).json({ success: false, message: "Password must be at least 8 characters long" });
         }
         if (!/\d/.test(newPassword)) {
-            return res.json({ success: false, message: "Password must contain at least one digit" });
+            return res.status(400).json({ success: false, message: "Password must contain at least one digit" });
         }
 
-        // hashing new password
         const salt = await bcrypt.genSalt(10);
         const hashedPassword = await bcrypt.hash(newPassword, salt);
 
         user.password = hashedPassword;
         await user.save();
-        res.json({ success: true, message: "Password Updated!" })
+        res.status(200).json({ success: true, message: "Password Updated!" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 

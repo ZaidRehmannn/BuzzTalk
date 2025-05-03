@@ -17,6 +17,7 @@ const StoreContextProvider = (props) => {
     const [unreadMessages, setunreadMessages] = useState({});
     const [addContactPopup, setaddContactPopup] = useState(false);
     const [isAppLoading, setIsAppLoading] = useState(true);
+    const [loggingOut, setloggingOut] = useState(false);
 
     const fetchUserData = async () => {
         const token = localStorage.getItem('token');
@@ -176,7 +177,9 @@ const StoreContextProvider = (props) => {
         addContactPopup,
         setaddContactPopup,
         isAppLoading,
-        resetStore
+        resetStore,
+        setloggingOut,
+        loggingOut
     };
 
     return (

@@ -14,7 +14,6 @@ const createGroup = async (req, res) => {
             adminId
         ];
 
-        // Create a new group chat
         const newGroup = await conversationModel.create({
             participants: participantIds,
             groupName,
@@ -23,22 +22,20 @@ const createGroup = async (req, res) => {
             messages: []
         });
 
-        // Update users to include this group in their `groupChats`
         await userModel.updateMany(
             { _id: { $in: participantIds } },
             { $push: { groupChats: { groupChatId: newGroup._id, groupChatName: groupName } } }
         );
 
-        res.json({ success: true, message: "Group created successfully!" });
+        res.status(201).json({ success: true, message: "Group created successfully!" });
 
-        // Emit event to all group members
         participantIds.forEach(memberId => {
             io.to(memberId).emit("groupChatAdded", newGroup);
         });
-        
+
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -46,10 +43,10 @@ const createGroup = async (req, res) => {
 const getGroupChats = async (req, res) => {
     try {
         const user = await userModel.findById(req.userId);
-        res.json({ success: true, groupChats: user.groupChats });
+        res.status(200).json({ success: true, groupChats: user.groupChats });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -57,10 +54,10 @@ const getGroupChats = async (req, res) => {
 const getGroupChatDetails = async (req, res) => {
     try {
         const groupChats = await conversationModel.find({ groupName: { $ne: null } });
-        res.json({ success: true, groupChatDetails: groupChats });
+        res.status(200).json({ success: true, groupChatDetails: groupChats });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" })
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -69,17 +66,14 @@ const uploadImage = async (req, res) => {
     const { groupChatId } = req.body;
     try {
         let group = await conversationModel.findById(groupChatId);
-        // if group picture already exists, delete the old one
         if (group.groupImage) {
             const publicId = group.groupImage.split('/').pop().split('.')[0];
             await cloudinary.uploader.destroy(`BuzzTalk-GroupPics/${publicId}`);
         }
-        // adding new group picture
         let image_filename = req.file.path;
         group.groupImage = image_filename;
         await group.save();
 
-        // updating the groupChat image field in users model
         const users = await userModel.find({ "groupChats.groupChatId": group._id });
         for (let user of users) {
             let groupChatToUpdate = user.groupChats.find(chat => chat.groupChatId.equals(group._id));
@@ -89,10 +83,10 @@ const uploadImage = async (req, res) => {
             }
         }
 
-        res.json({ success: true, image_filename });
+        res.status(200).json({ success: true, image_filename });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -104,13 +98,13 @@ const removeImage = async (req, res) => {
         if (group.groupImage) {
             const publicId = group.groupImage.split('/').pop().split('.')[0];
             await cloudinary.uploader.destroy(`BuzzTalk-GroupPics/${publicId}`);
-            group.groupImage = ""
+            group.groupImage = "";
         }
         await group.save();
-        res.json({ success: true, message: "Profile Picture Removed!" });
+        res.status(200).json({ success: true, message: "Profile Picture Removed!" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -139,10 +133,10 @@ const updateGroupChatDetails = async (req, res) => {
             await user.save();
         }
         await group.save();
-        res.json({ success: true, message: "Info Updated!" });
+        res.status(200).json({ success: true, message: "Info Updated!" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -157,10 +151,10 @@ const removeAdminMember = async (req, res) => {
             group.participants = group.participants.filter(member => member.toString() !== removeMember);
         }
         await group.save();
-        res.json({ success: true, message: "Info Updated!" });
+        res.status(200).json({ success: true, message: "Info Updated!" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
@@ -170,11 +164,20 @@ const removeGroupChat = async (req, res) => {
         const user = await userModel.findById(userId);
         user.groupChats = user.groupChats.filter(group => group.groupChatId.toString() !== groupChatId);
         await user.save();
-        res.json({ success: true, message: "Group chat removed successfully" });
+        res.status(200).json({ success: true, message: "Group chat removed successfully" });
     } catch (error) {
         console.log(error);
-        res.json({ success: false, message: "Error" });
+        res.status(500).json({ success: false, message: "Error" });
     }
 };
 
-export { createGroup, getGroupChats, getGroupChatDetails, uploadImage, removeImage, updateGroupChatDetails, removeAdminMember, removeGroupChat };
+export {
+    createGroup,
+    getGroupChats,
+    getGroupChatDetails,
+    uploadImage,
+    removeImage,
+    updateGroupChatDetails,
+    removeAdminMember,
+    removeGroupChat
+};
