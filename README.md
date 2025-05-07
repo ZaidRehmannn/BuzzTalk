@@ -30,6 +30,41 @@ BuzzTalk is a real-time chat application built with the MERN stack (MongoDB, Exp
 - **JWT (JSON Web Tokens)**: Secure authentication mechanism.
 - **Cloudinary**: Cloud-based image and video management.
 
+## Screenshots
+
+Here’s a visual overview of the key sections of the app:
+
+### **1. Home / Login / Signup Page**  
+Users can register a new account or log in to their existing account to start chatting.  
+
+![Login or Signup Page](./screenshots/HomePage.PNG)  
+
+### **2. Main Chat Page**  
+The main hub for chatting with your contacts and groups.  
+
+![Main Chat Page](./screenshots/ChatPage.PNG)  
+
+### **3. Add Group Chat Popup**  
+Create a new group chat to stay connected with multiple people.  
+
+![Add Group Chat Popup](./screenshots/AddGroupChat.PNG)  
+
+### **4. Add New Chat Popup**  
+Start a conversation with a new contact quickly.  
+
+![Add New Chat Popup](./screenshots/AddNewChat.PNG)  
+
+### **5. My Contacts Popup**  
+Manage your contact list and add new friends.  
+
+![My Contacts Popup](./screenshots/MyContacts.PNG)  
+
+### **6. Profile Information Popup**  
+View and edit your profile information.  
+
+![Profile Information Popup](./screenshots/ProfileInfo.PNG)  
+
+
 ## Demo Accounts
 
 To test the app without needing to create your own account, you can use the following demo accounts:
