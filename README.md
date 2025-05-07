@@ -1,77 +1,138 @@
-# BuzzTalk
+# 💬 BuzzTalk
 
-BuzzTalk is a real-time chat application built with the MERN stack (MongoDB, Express, React, Node.js). It offers seamless one-on-one and group messaging functionality with a modern, responsive user interface. The app uses Socket.IO for real-time communication, JWT for secure authentication, and integrates Cloudinary for efficient profile image management.
+BuzzTalk is a real-time chat application built with the MERN stack (MongoDB, Express.js, React.js, Node.js). It offers seamless one-on-one and group messaging functionality with a modern, responsive user interface. The app uses Socket.IO for real-time communication, JWT for secure authentication, and integrates Cloudinary for efficient profile image management.
 
----
+## 🚀 Features
 
-## Features
+- **Real-time Messaging**: Instant one-on-one and group chats using Socket.IO.
+- **Group Chats**: Create and manage group conversations.
+- **User Authentication**: Secure registration and login with JWT.
+- **User Profiles**: Customizable profiles with avatar uploads via Cloudinary.
+- **Responsive UI**: Built with Tailwind CSS and enhanced with Framer Motion for smooth animations.
 
-- **Real-time Messaging**: Instant one-on-one and group chats using Socket.IO for real-time communication.  
-- **Group Chats**: Create and manage group chats, allowing users to engage in discussions with multiple people simultaneously.  
-- **User Authentication**: Secure registration and login with JWT (JSON Web Tokens) for user authentication.  
-- **User Profiles**: Customizable user profiles, including the ability to upload and update profile pictures.  
-- **Cloudinary Integration**: Upload and store user profile pictures using Cloudinary for efficient image management.  
-- **Responsive UI**: A user-friendly, responsive interface built with React.js and styled using Tailwind CSS.  
-- **Message Notifications**: Real-time notifications for unread messages, including sound alerts when new messages arrive.  
-- **Private and Group Messaging**: Private conversations and group discussions with message history.  
-- **Error Handling & Validation**: Robust validation and error-handling mechanisms for both frontend and backend.  
+## 🛠️ Tech Stack
 
----
+### Frontend
 
-## Tech Stack
+- **React.js**: Component-based UI library.
+- **Tailwind CSS**: Utility-first CSS framework for responsive design.
+- **Framer Motion**: Animation library for React to enhance user interactions.
+- **Axios**: Promise-based HTTP client for API calls.
+- **React Router**: Declarative routing for React applications.
 
-**Frontend**: React, Tailwind CSS, Axios, Socket.IO-client  
-**Backend**: Node.js, Express.js, Socket.IO, MongoDB, JWT, Cloudinary  
+### Backend
 
----
+- **Node.js**: JavaScript runtime environment.
+- **Express.js**: Web framework for building APIs.
+- **MongoDB**: NoSQL database for storing user and chat data.
+- **Mongoose**: ODM for MongoDB, providing a schema-based solution.
+- **Socket.IO**: Enables real-time, bi-directional communication.
+- **JWT (JSON Web Tokens)**: Secure authentication mechanism.
+- **Cloudinary**: Cloud-based image and video management.
 
-## Deployment
+## Demo Accounts
 
-You can access the deployed version of the app here: **[BuzzTalk Live](https://your-deployment-url.com)**  
-*(Replace this with your actual deployment link)*
+To test the app without needing to create your own account, you can use the following demo accounts:
 
----
+1. **Account 1:**
+   - **Email:** liam.carter@demo.com
+   - **Password:** password12345
 
-## Usage Guide
+2. **Account 2:**
+   - **Email:** ethan.walker@demo.com
+   - **Password:** password12345
 
-To explore the app, you can either create a new account or use one of the demo user credentials provided below.
+3. **Account 3:**
+   - **Email:** noah.bennett@demo.com
+   - **Password:** password12345
 
-> 💡 **Note:** To start a chat with someone, they must also be a registered user on BuzzTalk.
+Feel free to log in with any of these accounts to explore the features of the app!
 
-### 🔐 Demo Accounts
+## 📦 Installation
 
-- **Account 1**  
-  - Email: `liam.carter@demo.com`  
-  - Password: `password12345`
+To run this project locally, follow these steps:
 
-- **Account 2**  
-  - Email: `ethan.walker@demo.com`  
-  - Password: `password12345`
+### Prerequisites
 
-- **Account 3**  
-  - Email: `noah.bennett@demo.com`  
-  - Password: `password12345`
+- Node.js and npm installed
+- MongoDB instance (local or cloud-based)
+- Cloudinary account for image uploads
 
-### 🚀 How to Use
+### Clone the Repository
 
-1. **Login/Register**:  
-   - Use one of the demo accounts or register a new one.
-   
-2. **Search Users**:  
-   - Use the search bar to find other registered users and start a one-on-one conversation.
-   
-3. **Create Group Chats**:  
-   - Click on the "Create Group" option, add multiple users, and set a group name to initiate a group conversation.
-   
-4. **Send Messages**:  
-   - Start chatting! All messages are delivered in real-time.
-   
-5. **Notifications**:  
-   - Get notified about unread messages instantly, with sound alerts for new incoming chats.
-
-6. **Profile Management**:  
-   - Go to your profile to update your name, profile picture (stored securely via Cloudinary), and other settings.
+```bash
+git clone https://github.com/ZaidRehmannn/BuzzTalk.git
+cd BuzzTalk
+```
 
 ---
 
-Feel free to explore the app using the demo credentials or by signing up with your own account.
+### 🔧 Backend Setup
+
+1. **Navigate to the backend directory**:
+
+   ```bash
+   cd backend
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**:
+
+   Create a `.env` file in the `backend` directory and add the following:
+
+   ```env
+   MONGO_URI=your_mongodb_connection_string
+   JWT_SECRET=your_jwt_secret
+   CLOUDINARY_CLOUD_NAME=your_cloudinary_cloud_name
+   CLOUDINARY_API_KEY=your_cloudinary_api_key
+   CLOUDINARY_API_SECRET=your_cloudinary_api_secret
+   ```
+
+4. **Start the backend server**:
+
+   ```bash
+   npm run server
+   ```
+
+   The backend server will start on `http://localhost:4000`.
+
+---
+
+### 🌐 Frontend Setup
+
+1. **Navigate to the frontend directory**:
+
+   ```bash
+   cd ../frontend
+   ```
+
+2. **Install dependencies**:
+
+   ```bash
+   npm install
+   ```
+
+3. **Configure environment variables**:
+
+   Create a `.env` file in the `frontend` directory and add the following:
+
+   ```env
+   VITE_API_URL=http://localhost:4000/api
+   ```
+
+4. **Start the frontend development server**:
+
+   ```bash
+   npm run dev
+   ```
+
+   The frontend will be accessible at `http://localhost:5173`.
+
+---
+
+Now, you can use BuzzTalk locally with full functionality, including real-time messaging and animated UI interactions.
