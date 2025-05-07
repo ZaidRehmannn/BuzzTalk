@@ -30,7 +30,7 @@ BuzzTalk is a real-time chat application built with the MERN stack (MongoDB, Exp
 - **JWT (JSON Web Tokens)**: Secure authentication mechanism.
 - **Cloudinary**: Cloud-based image and video management.
 
-## Screenshots
+## User Interface Overview
 
 Here’s a visual overview of the key sections of the app:
 
