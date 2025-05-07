@@ -30,6 +30,24 @@ BuzzTalk is a real-time chat application built with the MERN stack (MongoDB, Exp
 - **JWT (JSON Web Tokens)**: Secure authentication mechanism.
 - **Cloudinary**: Cloud-based image and video management.
 
+## Demo Accounts
+
+To test the app without needing to create your own account, you can use the following demo accounts:
+
+1. **Account 1:**
+   - **Email:** liam.carter@demo.com
+   - **Password:** password12345
+
+2. **Account 2:**
+   - **Email:** ethan.walker@demo.com
+   - **Password:** password12345
+
+3. **Account 3:**
+   - **Email:** noah.bennett@demo.com
+   - **Password:** password12345
+
+Feel free to log in with any of these accounts to explore the features of the app!
+
 ## 📦 Installation
 
 To run this project locally, follow these steps:
