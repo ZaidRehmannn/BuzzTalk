@@ -78,6 +78,10 @@ View and edit your profile information.
 
 ![Profile Information Popup](./screenshots/ProfileInfo.PNG)  
 
+## 🎥 Demo Video
+
+Watch the full demonstration of BuzzTalk in action:  
+[![BuzzTalk Demo Video](https://img.youtube.com/vi/9df227d976c54acb9589b00af960d139/0.jpg)](https://www.loom.com/share/9df227d976c54acb9589b00af960d139?sid=6b1e25fd-0c5b-4d2f-9dd5-d3f1f64b6000)
 
 ## Demo Accounts
 
