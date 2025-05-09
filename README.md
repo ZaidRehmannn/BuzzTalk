@@ -81,7 +81,7 @@ View and edit your profile information.
 ## 🎥 Demo Video
 
 Watch the full demonstration of BuzzTalk in action:  
-[![BuzzTalk Demo Video](https://www.loom.com/share/9df227d976c54acb9589b00af960d139?sid=6b1e25fd-0c5b-4d2f-9dd5-d3f1f64b6000)
+[👉 Watch Demo on Loom](https://www.loom.com/share/9df227d976c54acb9589b00af960d139?sid=6b1e25fd-0c5b-4d2f-9dd5-d3f1f64b6000)
 
 ## Demo Accounts
 
