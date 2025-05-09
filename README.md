@@ -166,15 +166,7 @@ cd BuzzTalk
    npm install
    ```
 
-3. **Configure environment variables**:
-
-   Create a `.env` file in the `frontend` directory and add the following:
-
-   ```env
-   VITE_API_URL=http://localhost:4000/api
-   ```
-
-4. **Start the frontend development server**:
+3. **Start the frontend development server**:
 
    ```bash
    npm run dev
